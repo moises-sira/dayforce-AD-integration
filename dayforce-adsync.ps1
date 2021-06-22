@@ -1,8 +1,8 @@
 $user=$env:USER
 $password=$env:PASSWORD
 $dburl="postgresql://"+$user+":"+$password+"@stage-postgres-01.chaxpheegiww.us-west-2.rds.amazonaws.com:5432/dayforce_hr"
-#$csv="select * from public.v_employees" | psql --csv $dburl | ConvertFrom-Csv -UseCulture #| out-file asd.csv
-$csv =  Import-Csv "sample.csv" -delimiter ";"
+$csv="select * from public.v_employees" | psql --csv $dburl | ConvertFrom-Csv -UseCulture #| out-file asd.csv
+#$csv =  Import-Csv "sample.csv" -delimiter ";"
 
 ForEach ($item In $csv){
 $mail_manager=""
