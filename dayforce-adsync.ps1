@@ -4,6 +4,7 @@ $table_name=$env:SOURCE_TABLE
 $dburl="postgresql://"+$user+":"+$password+"@stage-postgres-01.chaxpheegiww.us-west-2.rds.amazonaws.com:5432/dayforce_hr"
 $csv="select * from $table_name"| psql --csv $dburl | ConvertFrom-Csv -UseCulture
 
+
 ForEach ($item In $csv){
 $mail_manager=""
 #Find and match manager id with email
@@ -20,9 +21,7 @@ $manager_user = $mail_manager.Split("@")
     
     #depends on employment_status "Active or Terminated"
     if ($item."employment_status" -eq "Active"){
-    #control
-    write-host $email "| aduser:" $username[0] "| manager email: " $mail_manager " | manager ADuser:"$manager_user[0]
-    
+   
 ###################### Updating users... ###################################
     
     # id
@@ -61,7 +60,11 @@ $manager_user = $mail_manager.Split("@")
     # DisplayName
     Set-ADUser -Identity $username[0] -DisplayName $Display_Name                 
 
-    ## -GivenName, -Surname, -DisplayName office address????? 
-
-    }
+    #Message
+    write-host "User:" $username[0] "Active User Successfully Modified"
+    
+    } 
+    Else {
+        write-host "No modified user:" $username[0] "because it is Terminated"
+         }
 }
